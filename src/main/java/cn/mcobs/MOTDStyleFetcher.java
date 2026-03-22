@@ -67,12 +67,27 @@ public class MOTDStyleFetcher {
     }
     
     /**
+     * 构建API URL
+     * @param styleCode 样式码或完整URL
+     * @return 完整的API URL
+     */
+    static String buildApiUrl(String styleCode) {
+        if (styleCode == null || styleCode.isEmpty()) {
+            throw new IllegalArgumentException("styleCode must not be null or empty");
+        }
+        if (styleCode.startsWith("http://") || styleCode.startsWith("https://")) {
+            return styleCode;
+        }
+        return "https://motd.mcobs.cn/api/motd/" + styleCode;
+    }
+
+    /**
      * 内部方法，实际执行获取MOTD样式的逻辑
      */
     private void fetchStyleInternal(String styleCode, Callback callback) {
         try {
             // 构建API URL
-            String apiUrl = "https://motd.mcobs.cn/api/motd/" + styleCode;
+            String apiUrl = buildApiUrl(styleCode);
             
             // 发送HTTP请求
             URL url = new URL(apiUrl);
